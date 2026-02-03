@@ -1,0 +1,150 @@
+type Query {
+    _empty: String
+    myTickets: [Ticket!]! @field(resolver: "App\\GraphQL\\Queries\\TicketQuery@myTickets") @guard
+    ticket(id: ID!): Ticket @field(resolver: "App\\GraphQL\\Queries\\ViewTicketQuery") @guard
+    me: User @auth
+    myNotifications: [Notification!]! @field(resolver: "App\\GraphQL\\Queries\\NotificationQuery@myNotifications") @guard
+    unreadNotificationsCount: Int!
+  @field(resolver: "App\\GraphQL\\Queries\\NotificationQuery@unreadCount")
+  @guard
+
+}
+
+
+
+
+type Mutation {
+    requestRegisterOtp(input: RegisterInput!): MessageResponse
+        @field(resolver: "App\\GraphQL\\Mutations\\Auth\\RequestRegisterOtp")
+
+    confirmRegisterOtp(email: String!, otp: String!): AuthResponse
+        @field(resolver: "App\\GraphQL\\Mutations\\Auth\\ConfirmRegisterOtp")
+
+    requestLoginOtp(input: LoginInput!): MessageResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\Auth\\RequestLoginOtp")
+
+    confirmLoginOtp(email: String!, otp: String!): LoginResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\Auth\\ConfirmLoginOtp")
+
+    requestMagicLoginLink(email: String!): MessageResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\Auth\\RequestMagicLoginLink")
+
+  confirmMagicLogin(token: String!): AuthResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\Auth\\ConfirmMagicLogin")
+
+  requestPasswordResetLink(email: String!): MessageResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\Auth\\RequestPasswordResetLink")
+
+  confirmPasswordResetLink(token: String!): AuthResponse
+    @field(resolver: "App\\GraphQL\\Mutations\\Auth\\ConfirmPasswordResetLink")
+
+    createTicket(input: CreateTicketInput!): Ticket
+    @guard(with: ["sanctum"])
+    @field(resolver: "App\\GraphQL\\Mutations\\TicketMutator@create")
+
+    closeTicket(id: ID!): Ticket @field(resolver: "App\\GraphQL\\Mutations\\TicketMutator@close") @guard(with: ["sanctum"])
+  openTicket(id: ID!): Ticket @field(resolver: "App\\GraphQL\\Mutations\\TicketMutator@open") @guard(with: ["sanctum"])
+
+  sendMessage(input: SendMessageInput!): Message
+    @guard(with: ["sanctum"]) @field(resolver: "App\\GraphQL\\Mutations\\SendMessage")
+
+    markNotificationAsRead(id: ID!): Notification
+    @field(resolver: "App\\GraphQL\\Mutations\\NotificationMutator@markAsRead") @guard
+
+}
+
+
+input RegisterInput {
+    username: String!
+    email: String!
+    phone: String
+    password: String!
+    department: String
+}
+
+type MessageResponse {
+    message: String!
+}
+
+type AuthResponse {
+    token: String!
+    user: User!
+}
+
+
+type Role {
+  id: ID!
+  name: String!
+}
+
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    phone: String
+    department: String
+    role: String @field(resolver: "App\\GraphQL\\Resolvers\\UserResolver@resolveRole")
+
+}
+
+input LoginInput {
+    email: String!
+    password: String!
+}
+
+type LoginResponse {
+  token: String!
+  user: User!
+}
+
+
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
+
+
+type Ticket {
+  id: ID!
+  number: String!
+  title: String!
+  description: String!
+  status: String!
+  user: User!
+  closed_at: String
+  reopened_at: String
+  closedBy: User
+  reopenedBy: User
+  created_at: String!
+  updated_at: String!
+  lastAdminMessage: Message
+  messages: [Message!]! @hasMany
+}
+
+type Message {
+  id: ID!
+  ticket_id: ID!
+  body: String!
+  sender: User!
+  created_at: String!
+}
+
+
+
+input CreateTicketInput {
+  title: String!
+  description: String
+}
+
+input SendMessageInput {
+  ticket_id: ID!
+  body: String!
+}
+
+type Notification {
+  id: ID!
+  message: String!
+  is_read: Boolean!
+  created_at: String!
+}
