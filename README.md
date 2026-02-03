@@ -105,10 +105,6 @@ npm run dev
 
 ---
 
-## 👤 Author
-
-**Heba Elgohary**  
-🔗 [GitHub Profile](https://github.com/HebaAbdElhamed)
 
 ---
 
@@ -117,7 +113,7 @@ npm run dev
 This project is not open-source. All rights are reserved to Heba Elgohary.  
 For inquiries or access to the full version, please contact me directly.
 
-🔗 [LinkedIn – Heba Elgohary](https://www.linkedin.com/in/heba-elgohary-a13074167/)
+🔗 [LinkedIn – Malleswara rao]([https://www.linkedin.com/in/malleswara-rao-tandra-511416331/])
 
 
 ---
@@ -125,10 +121,9 @@ For inquiries or access to the full version, please contact me directly.
 ### 🔍 Note
 
 This repository demonstrates only basic parts of a larger real-time support ticketing system.  
-For access to the full version or collaboration inquiries, feel free to reach out via:
 
-- 🔗 [LinkedIn – Heba Elgohary](https://www.linkedin.com/in/heba-elgohary-a13074167/)
-- 🐙 [GitHub – Heba Elgohary](https://github.com/HebaAbdElhamed)
+
+
 
 
 
